@@ -73,7 +73,12 @@ public class apachidynamic {
                         {
                             Cell cell=row.getCell(k);
                             if(cell==null)
-                            {
+                            {   
+                                if (k=0)
+                                {
+                                System.out.println( "noSecondaryKeyWord");
+                                pst.setString(i, "noSecondaryKeyWord"); 
+                                }
                                 i=i+1;
                                 System.out.println( "found");
                                 pst.setString(i, null);
