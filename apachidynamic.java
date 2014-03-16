@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -36,21 +35,28 @@ public class apachidynamic {
  
             //Get first/desired sheet from the workbook
             XSSFSheet sheet = workbook.getSheetAt(0);
-           Iterator<Row> ir = sheet.iterator();
-           Row r=ir.next();
-           System.out.println(r.getLastCellNum());
+            int MAX_COLUMN=0;
+       int rowStart = sheet.getFirstRowNum();
+    int rowEnd = sheet.getLastRowNum();
+
+    for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+       Row r = sheet.getRow(rowNum);
+
+       int lastColumn = r.getLastCellNum();
+       if (MAX_COLUMN < lastColumn)
+       {
+         MAX_COLUMN = lastColumn;  
+       }
+      
+    }
+          
             
             
-            switch(r.getLastCellNum())
+            switch(MAX_COLUMN)
             {
                 case 4:
                     Iterator<Row> rowIterator = sheet.iterator();                
-                    String sql="insert into fourfields values (?";
-                    for(int p=0;p<r.getLastCellNum()-1;p++)
-                    {
-                      sql+=",?";
-                    }
-                    sql+=")";
+                    String sql="insert into fourfields values (?, ?, ?, ?) ";
                     while (rowIterator.hasNext()) 
                     {
                         i=0;
@@ -62,10 +68,8 @@ public class apachidynamic {
                         Row row = rowIterator.next();
                         
                         Iterator<Cell> cellIterator = row.cellIterator();
-                        int min=row.getFirstCellNum();
-                        int max=row.getLastCellNum();
-                         System.out.println("firstcell"+min+"lastcell"+max);
-                        for(int k=min;k<max;k++)
+
+                        for(int k=0;k<MAX_COLUMN;k++)
                         {
                             Cell cell=row.getCell(k);
                             if(cell==null)
